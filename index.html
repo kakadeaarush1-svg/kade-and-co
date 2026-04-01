@@ -3,124 +3,247 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kade &amp; Co. &mdash; Paper Trading Simulator</title>
+  <title>Kade &amp; Co. &mdash; Paper Trading</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <div class="logo">&#128200; Kade &amp; Co.</div>
-    <div class="tagline">Paper Trading Simulator</div>
-    <div class="balance-display">
-      <span>Portfolio Value: </span><span id="portfolio-value">$0.00</span>
-      &nbsp;|&nbsp;
-      <span>Cash: </span><span id="cash-balance">$100,000.00</span>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="header-inner">
+
+      <!-- Logo -->
+      <a class="brand" href="#">
+        <div class="tiger-emblem">
+          <!-- Tiger SVG Emblem (inline, matches your logo) -->
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="Kade and Co tiger emblem">
+            <circle cx="50" cy="50" r="47" fill="none" stroke="#C9A84C" stroke-width="2.5"/>
+            <!-- Tiger body (stylised) -->
+            <g fill="#F5F0E8" stroke="#0D1B3E" stroke-width="0.6">
+              <!-- body -->
+              <ellipse cx="52" cy="58" rx="18" ry="11" transform="rotate(-30 52 58)"/>
+              <!-- head -->
+              <ellipse cx="34" cy="67" rx="10" ry="9"/>
+              <!-- haunch -->
+              <ellipse cx="70" cy="45" rx="10" ry="8" transform="rotate(-20 70 45)"/>
+              <!-- tail arc -->
+              <path d="M72 38 Q80 20 68 12 Q60 8 65 18" fill="none" stroke="#F5F0E8" stroke-width="4" stroke-linecap="round"/>
+              <!-- tail tip -->
+              <ellipse cx="65" cy="18" rx="4" ry="3" transform="rotate(30 65 18)"/>
+              <!-- front legs -->
+              <rect x="27" y="74" width="5" height="13" rx="2" transform="rotate(5 27 74)"/>
+              <rect x="35" y="75" width="5" height="12" rx="2" transform="rotate(-5 35 75)"/>
+              <!-- back legs -->
+              <rect x="58" y="63" width="5" height="11" rx="2" transform="rotate(15 58 63)"/>
+              <!-- stripes -->
+              <line x1="42" y1="54" x2="46" y2="62" stroke="#0D1B3E" stroke-width="1.5"/>
+              <line x1="48" y1="51" x2="52" y2="60" stroke="#0D1B3E" stroke-width="1.5"/>
+              <line x1="55" y1="50" x2="58" y2="58" stroke="#0D1B3E" stroke-width="1.5"/>
+              <!-- face details -->
+              <circle cx="31" cy="64" r="1.5" fill="#0D1B3E"/>
+              <circle cx="37" cy="64" r="1.5" fill="#0D1B3E"/>
+              <!-- nose -->
+              <ellipse cx="34" cy="70" rx="2" ry="1" fill="#C9A84C"/>
+              <!-- whiskers -->
+              <line x1="25" y1="69" x2="32" y2="70" stroke="#F5F0E8" stroke-width="0.8"/>
+              <line x1="25" y1="71" x2="32" y2="71" stroke="#F5F0E8" stroke-width="0.8"/>
+              <line x1="36" y1="70" x2="43" y2="69" stroke="#F5F0E8" stroke-width="0.8"/>
+              <line x1="36" y1="71" x2="43" y2="72" stroke="#F5F0E8" stroke-width="0.8"/>
+            </g>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">Kade &amp; Co.</span>
+          <span class="brand-sub">Paper Trading</span>
+        </div>
+      </a>
+
+      <!-- Balance Strip -->
+      <div class="header-metrics">
+        <div class="metric">
+          <span class="metric-label">Portfolio Value</span>
+          <span class="metric-value" id="portfolio-value">$100,000.00</span>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric">
+          <span class="metric-label">Available Cash</span>
+          <span class="metric-value cash" id="cash-balance">$100,000.00</span>
+        </div>
+        <div class="metric-divider"></div>
+        <div class="metric">
+          <span class="metric-label">Total P&amp;L</span>
+          <span class="metric-value" id="total-pnl">$0.00</span>
+        </div>
+      </div>
+
     </div>
   </header>
 
-  <main>
-    <!-- Trade Panel -->
-    <section class="panel trade-panel">
-      <h2>Place Order</h2>
-      <div class="form-group">
-        <label for="ticker">Ticker Symbol</label>
-        <input type="text" id="ticker" placeholder="e.g. AAPL" maxlength="10" />
-      </div>
-      <div class="form-group">
-        <label for="quantity">Quantity</label>
-        <input type="number" id="quantity" placeholder="Shares" min="1" />
-      </div>
-      <div class="form-group">
-        <label for="order-type">Order Type</label>
-        <select id="order-type">
-          <option value="market">Market</option>
-          <option value="limit">Limit</option>
-        </select>
-      </div>
-      <div class="form-group" id="limit-price-group" style="display:none">
-        <label for="limit-price">Limit Price ($)</label>
-        <input type="number" id="limit-price" placeholder="0.00" min="0.01" step="0.01" />
-      </div>
-      <div class="btn-group">
-        <button class="btn btn-buy" onclick="placeOrder('buy')">&#9650; Buy</button>
-        <button class="btn btn-sell" onclick="placeOrder('sell')">&#9660; Sell</button>
-      </div>
-      <div id="trade-message" class="trade-message"></div>
-    </section>
+  <!-- ===== MAIN ===== -->
+  <main class="main-grid">
 
-    <!-- Quote Panel -->
-    <section class="panel quote-panel">
-      <h2>Live Quote</h2>
-      <div class="form-group">
-        <label for="quote-ticker">Ticker Symbol</label>
-        <input type="text" id="quote-ticker" placeholder="e.g. TSLA" maxlength="10" />
-        <button class="btn btn-neutral" onclick="fetchQuote()">Get Quote</button>
-      </div>
-      <div id="quote-result" class="quote-result hidden">
-        <div class="quote-symbol" id="q-symbol"></div>
-        <div class="quote-price" id="q-price"></div>
-        <div class="quote-change" id="q-change"></div>
-        <div class="quote-meta">
-          <span>Open: <b id="q-open"></b></span>
-          <span>High: <b id="q-high"></b></span>
-          <span>Low: <b id="q-low"></b></span>
-          <span>Vol: <b id="q-vol"></b></span>
+    <!-- LEFT COLUMN -->
+    <div class="left-col">
+
+      <!-- Order Panel -->
+      <section class="card order-card">
+        <div class="card-header">
+          <span class="card-eyebrow">Execute</span>
+          <h2 class="card-title">Place Order</h2>
         </div>
-      </div>
-      <div id="quote-error" class="quote-error hidden"></div>
-    </section>
+        <div class="card-body">
+          <div class="field-group">
+            <label class="field-label" for="ticker">Ticker Symbol</label>
+            <input class="field-input" type="text" id="ticker" placeholder="AAPL" maxlength="10" autocomplete="off" />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="quantity">Quantity (Shares)</label>
+            <input class="field-input" type="number" id="quantity" placeholder="0" min="1" />
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label" for="order-type">Order Type</label>
+              <select class="field-input" id="order-type" onchange="toggleLimitPrice()">
+                <option value="market">Market</option>
+                <option value="limit">Limit</option>
+              </select>
+            </div>
+            <div class="field-group" id="limit-price-group" style="display:none">
+              <label class="field-label" for="limit-price">Limit Price</label>
+              <input class="field-input" type="number" id="limit-price" placeholder="$0.00" min="0.01" step="0.01" />
+            </div>
+          </div>
+          <div class="order-actions">
+            <button class="action-btn buy-btn" onclick="placeOrder('buy')">
+              <span class="action-icon">&#9650;</span> Buy
+            </button>
+            <button class="action-btn sell-btn" onclick="placeOrder('sell')">
+              <span class="action-icon">&#9660;</span> Sell
+            </button>
+          </div>
+          <div id="trade-message" class="trade-message"></div>
+        </div>
+      </section>
 
-    <!-- Portfolio Panel -->
-    <section class="panel portfolio-panel">
-      <h2>My Portfolio</h2>
-      <table id="portfolio-table">
-        <thead>
-          <tr>
-            <th>Ticker</th>
-            <th>Shares</th>
-            <th>Avg Cost</th>
-            <th>Cur. Price</th>
-            <th>Mkt Value</th>
-            <th>P&amp;L</th>
-            <th>P&amp;L %</th>
-          </tr>
-        </thead>
-        <tbody id="portfolio-body">
-          <tr><td colspan="7" class="empty-msg">No positions yet. Place your first trade!</td></tr>
-        </tbody>
-      </table>
-    </section>
+      <!-- Quote Panel -->
+      <section class="card quote-card">
+        <div class="card-header">
+          <span class="card-eyebrow">Market Data</span>
+          <h2 class="card-title">Live Quote</h2>
+        </div>
+        <div class="card-body">
+          <div class="quote-input-row">
+            <input class="field-input" type="text" id="quote-ticker" placeholder="Enter symbol&hellip;" maxlength="10" autocomplete="off" onkeydown="if(event.key==='Enter') fetchQuote()" />
+            <button class="ghost-btn" onclick="fetchQuote()">Fetch</button>
+          </div>
+          <div id="quote-result" class="quote-result hidden">
+            <div class="quote-top">
+              <div class="quote-symbol" id="q-symbol"></div>
+              <div class="quote-change-badge" id="q-change"></div>
+            </div>
+            <div class="quote-price" id="q-price"></div>
+            <div class="quote-grid">
+              <div class="quote-stat"><span>Open</span><b id="q-open"></b></div>
+              <div class="quote-stat"><span>High</span><b id="q-high"></b></div>
+              <div class="quote-stat"><span>Low</span><b id="q-low"></b></div>
+              <div class="quote-stat"><span>Volume</span><b id="q-vol"></b></div>
+            </div>
+            <button class="ghost-btn use-price-btn" onclick="useQuotePrice()">Use this price &rarr;</button>
+          </div>
+          <div id="quote-error" class="quote-error hidden"></div>
+        </div>
+      </section>
 
-    <!-- Order History Panel -->
-    <section class="panel history-panel">
-      <h2>Order History</h2>
-      <button class="btn btn-neutral small" onclick="resetSimulator()">&#8635; Reset Simulator</button>
-      <table id="history-table">
-        <thead>
-          <tr>
-            <th>Time</th>
-            <th>Ticker</th>
-            <th>Action</th>
-            <th>Shares</th>
-            <th>Price</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody id="history-body">
-          <tr><td colspan="6" class="empty-msg">No orders placed yet.</td></tr>
-        </tbody>
-      </table>
-    </section>
+    </div><!-- /left-col -->
 
-    <!-- Charts / Price simulation -->
-    <section class="panel chart-panel">
-      <h2>Price Simulator <span class="chart-ticker-label" id="chart-ticker-label"></span></h2>
-      <p class="chart-hint">Simulated price movements for the last 30 ticks of any fetched ticker.</p>
-      <canvas id="price-chart" width="700" height="220"></canvas>
-    </section>
+    <!-- RIGHT COLUMN -->
+    <div class="right-col">
+
+      <!-- Portfolio Panel -->
+      <section class="card portfolio-card">
+        <div class="card-header">
+          <span class="card-eyebrow">Holdings</span>
+          <h2 class="card-title">My Portfolio</h2>
+        </div>
+        <div class="card-body no-pad">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Ticker</th>
+                  <th>Shares</th>
+                  <th>Avg Cost</th>
+                  <th>Price</th>
+                  <th>Mkt Value</th>
+                  <th>P&amp;L</th>
+                  <th>Return</th>
+                </tr>
+              </thead>
+              <tbody id="portfolio-body">
+                <tr><td colspan="7" class="empty-state">No positions yet &mdash; place your first trade below.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chart Panel -->
+      <section class="card chart-card">
+        <div class="card-header">
+          <span class="card-eyebrow">Simulation</span>
+          <h2 class="card-title">Price Chart <span class="chart-label" id="chart-ticker-label"></span></h2>
+        </div>
+        <div class="card-body">
+          <canvas id="price-chart" height="200"></canvas>
+          <p class="chart-note">30-tick simulated price movement based on fetched quote.</p>
+        </div>
+      </section>
+
+      <!-- History Panel -->
+      <section class="card history-card">
+        <div class="card-header history-header">
+          <div>
+            <span class="card-eyebrow">Activity</span>
+            <h2 class="card-title">Order History</h2>
+          </div>
+          <button class="ghost-btn reset-btn" onclick="resetSimulator()">&#8635; Reset</button>
+        </div>
+        <div class="card-body no-pad">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Ticker</th>
+                  <th>Side</th>
+                  <th>Shares</th>
+                  <th>Price</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody id="history-body">
+                <tr><td colspan="6" class="empty-state">No orders placed yet.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /right-col -->
   </main>
 
-  <footer>
-    <p>Kade &amp; Co. &copy; 2026 &mdash; Paper trading only. No real money involved. Prices are simulated.</p>
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-emblem">
+      <svg viewBox="0 0 20 20" width="18" height="18">
+        <circle cx="10" cy="10" r="9" fill="none" stroke="#C9A84C" stroke-width="1.2"/>
+        <text x="10" y="14" text-anchor="middle" font-size="8" fill="#C9A84C" font-family="serif">K</text>
+      </svg>
+    </div>
+    <p>Kade &amp; Co. &copy; 2026 &nbsp;&mdash;&nbsp; Paper trading only. No real money involved. All prices are simulated.</p>
   </footer>
 
   <script src="app.js"></script>
